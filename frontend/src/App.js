@@ -1,18 +1,24 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './index.css';
-import Navbar from './components/Navbar';
+import styled from 'styled-components';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Posts from './pages/Posts';
 import Profile from './pages/Profile';
 import AdminPanel from './pages/AdminPanel';
+import Navbar from './components/Navbar';
+
+const AppContainer = styled.div`
+  min-height: 100vh;
+  background: #f5f6fa;
+  font-family: 'Segoe UI', sans-serif;
+`;
 
 function App() {
   return (
     <Router>
       <Navbar />
-      <div className="min-h-screen bg-gray-100 font-sans">
+      <AppContainer>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -21,7 +27,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/admin" element={<AdminPanel />} />
         </Routes>
-      </div>
+      </AppContainer>
     </Router>
   );
 }

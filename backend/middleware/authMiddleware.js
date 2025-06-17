@@ -2,7 +2,7 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import User from "../models/User.js";
-import Post from "../models/Post.js"; 
+import Post from "../models/Post.js"; // adjust if your model name is different
 
 // Protect route middleware
 export const protect = asyncHandler(async (req, res, next) => {

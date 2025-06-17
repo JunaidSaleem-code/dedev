@@ -68,24 +68,3 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-## Tailwind CSS Setup
-
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-### How it was set up:
-1. Installed Tailwind CSS, PostCSS, and Autoprefixer:
-   ```bash
-   npm install -D tailwindcss postcss autoprefixer
-   npx tailwindcss init -p
-   ```
-2. Configured `tailwind.config.js` to scan all files in `src/`.
-3. Updated `postcss.config.js` to use Tailwind and Autoprefixer.
-4. Replaced `src/index.css` with Tailwind's base, components, and utilities imports:
-   ```css
-   @tailwind base;
-   @tailwind components;
-   @tailwind utilities;
-   ```
-
-You can now use Tailwind utility classes in your React components.
