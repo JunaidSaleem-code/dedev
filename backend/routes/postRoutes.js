@@ -7,7 +7,7 @@ import {
   updatePost,
   deletePost,
 } from '../controllers/postController.js';
-import { protect, adminOnly, isAuthorOrAdmin } from '../middleware/authMiddleware.js'; // ✅ import adminOnly
+import { protect, isAuthorOrAdmin } from '../middleware/authMiddleware.js'; // ✅ import adminOnly
 import { body, validationResult } from 'express-validator';
 
 const router = express.Router();
@@ -17,7 +17,6 @@ router.route('/').get(getPosts);
 
 // Protected route for creating post
 router.route('/')
-  .get(getPosts)
   .post([
     protect,
     body('title').notEmpty().withMessage('Title is required'),
@@ -49,6 +48,5 @@ router
     }
   ], updatePost)
   .delete(protect, isAuthorOrAdmin, deletePost);
-  // .delete(protect, isAuthorOrAdmin, deletePost); // ✅ Only admin can delete
 
 export default router;

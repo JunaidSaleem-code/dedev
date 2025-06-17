@@ -1,35 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import axios from 'axios';
 import Loader from '../components/Loader';
 import ErrorMessage from '../components/ErrorMessage';
 import PostList from '../components/PostList';
-
-const Container = styled.div`
-  max-width: 900px;
-  margin: 2rem auto;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  padding: 2rem;
-`;
-const Title = styled.h2`
-  color: #273c75;
-  margin-bottom: 1rem;
-`;
-const Section = styled.div`
-  margin-bottom: 2rem;
-`;
-const Button = styled.button`
-  background: #e84118;
-  color: #fff;
-  border: none;
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-  &:hover { background: #c23616; }
-`;
 
 export default function AdminPanel() {
   const user = JSON.parse(localStorage.getItem('userInfo'));
@@ -75,28 +48,36 @@ export default function AdminPanel() {
     }
   };
 
-  if (!user || user.role !== 'admin') return <Container><ErrorMessage>Admin access only.</ErrorMessage></Container>;
+  if (!user || user.role !== 'admin') return <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8 mt-8"><ErrorMessage>Admin access only.</ErrorMessage></div>;
 
   return (
-    <Container>
-      <Title>Admin Panel</Title>
+    <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8 mt-8">
+      <h2 className="text-blue-900 mb-4 text-2xl font-bold">Admin Panel</h2>
       {loading && <Loader />}
       {error && <ErrorMessage>{error}</ErrorMessage>}
-      <Section>
-        <h3>Users</h3>
-        <ul style={{listStyle: 'none', padding: 0}}>
+      <div className="mb-8">
+        <h3 className="text-lg font-semibold mb-2">Users</h3>
+        <ul className="list-none p-0">
           {users.map(u => (
-            <li key={u._id} style={{borderBottom: '1px solid #f1f2f6', padding: '1rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+            <li
+              key={u._id}
+              className="border-b border-gray-100 py-4 flex justify-between items-center last:border-b-0"
+            >
               <span>{u.name} ({u.email}) - {u.role}</span>
-              <Button onClick={() => handleDeleteUser(u._id)}>Delete</Button>
+              <button
+                onClick={() => handleDeleteUser(u._id)}
+                className="bg-red-600 text-white border-none px-4 py-2 rounded font-bold hover:bg-red-800 transition"
+              >
+                Delete
+              </button>
             </li>
           ))}
         </ul>
-      </Section>
-      <Section>
-        <h3>Posts</h3>
+      </div>
+      <div className="mb-8">
+        <h3 className="text-lg font-semibold mb-2">Posts</h3>
         {!loading && !error && <PostList posts={posts} />}
-      </Section>
-    </Container>
+      </div>
+    </div>
   );
 } 

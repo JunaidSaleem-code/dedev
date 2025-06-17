@@ -1,6 +1,6 @@
 // routes/userRoutes.js
 import express from 'express';
-import { loginUser, registerUser, deleteOwnAccount, updateOwnAccount } from '../controllers/userController.js';
+import { loginUser, registerUser, deleteOwnAccount, updateOwnAccount, logoutUser } from '../controllers/userController.js';
 import { body } from 'express-validator';
 import { validationResult } from 'express-validator';
 import { protect } from '../middleware/authMiddleware.js';
@@ -30,7 +30,7 @@ router.post('/login', [
   next();
 }, loginUser);
 
-router.post('/logout', (req, res) => res.json({ message: 'Logout successful' }));
+router.post('/logout', logoutUser);
 
 router.delete('/me', protect, deleteOwnAccount);
 

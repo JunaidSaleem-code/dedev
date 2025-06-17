@@ -1,43 +1,6 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 80vh;
-`;
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  background: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-`;
-const Input = styled.input`
-  padding: 0.5rem;
-  border: 1px solid #dcdde1;
-  border-radius: 4px;
-`;
-const Button = styled.button`
-  background: #4078c0;
-  color: #fff;
-  border: none;
-  padding: 0.7rem;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-  &:hover { background: #273c75; }
-`;
-const Error = styled.div`
-  color: #e84118;
-  font-size: 0.95rem;
-`;
+import axios from 'axios';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -66,15 +29,36 @@ export default function Register() {
   };
 
   return (
-    <Container>
-      <Form onSubmit={handleSubmit}>
-        <h2>Register</h2>
-        <Input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
-        <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-        <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-        {error && <Error>{error}</Error>}
-        <Button type="submit">Register</Button>
-      </Form>
-    </Container>
+    <div className="flex flex-col items-center justify-center min-h-[80vh]">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-2 text-center">Register</h2>
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          autoComplete="name"
+          className="p-3 border border-gray-300 rounded text-base"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          autoComplete="email"
+          className="p-3 border border-gray-300 rounded text-base"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          autoComplete="new-password"
+          className="p-3 border border-gray-300 rounded text-base"
+        />
+        {error && <div className="text-red-600 text-base text-center">{error}</div>}
+        <button type="submit" className="bg-blue-700 text-white border-none p-3 rounded font-bold text-base hover:bg-blue-900 transition">Register</button>
+      </form>
+    </div>
   );
 } 

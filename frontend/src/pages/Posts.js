@@ -1,51 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import PostForm from '../components/PostForm';
 
 axios.defaults.baseURL = 'http://localhost:5000';
-
-const Container = styled.div`
-  max-width: 700px;
-  margin: 2rem auto;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.09);
-  padding: 2.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  @media (max-width: 600px) {
-    padding: 1.2rem 0.5rem;
-    margin: 1rem 0.2rem;
-  }
-`;
-const Title = styled.h2`
-  color: #273c75;
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
-  text-align: center;
-`;
-const PostList = styled.ul`
-  list-style: none;
-  padding: 0;
-`;
-const PostItem = styled.li`
-  border-bottom: 1px solid #f1f2f6;
-  padding: 1rem 0;
-  &:last-child { border-bottom: none; }
-`;
-const Author = styled.div`
-  color: #718093;
-  font-size: 0.95rem;
-`;
-const Error = styled.div`
-  color: #e84118;
-  font-size: 0.98rem;
-  margin-top: 0.5rem;
-  text-align: center;
-`;
 
 export default function Posts() {
   const [posts, setPosts] = useState([]);
@@ -105,7 +63,6 @@ export default function Posts() {
       navigate('/');
     } catch (err) {
       if (err.response && err.response.status === 401) {
-        // window.location.href = '/login';
         console.log(err);
       } else {
         setError(err.response?.data?.message || 'Failed to create post');
@@ -152,20 +109,31 @@ export default function Posts() {
   };
 
   return (
-    <Container>
-      <Title>Create Post</Title>
-      {user && (
-        <PostForm
-          title={title}
-          content={content}
-          onTitleChange={e => setTitle(e.target.value)}
-          onContentChange={e => setContent(e.target.value)}
-          onSubmit={handleCreate}
-          loading={creating}
-          error={error}
-        />
+    <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-10 flex flex-col items-center mt-8 mb-8">
+      <h2 className="text-blue-900 mb-6 text-2xl text-center font-bold">Posts</h2>
+      <PostForm
+        title={title}
+        content={content}
+        onTitleChange={e => setTitle(e.target.value)}
+        onContentChange={e => setContent(e.target.value)}
+        onSubmit={handleCreate}
+        loading={creating}
+        error={error}
+      />
+      {loading ? (
+        <Loader />
+      ) : (
+        <ul className="list-none p-0 w-full">
+          {posts.map(post => (
+            <li key={post._id} className="border-b border-gray-100 py-4 last:border-b-0">
+              <div className="font-bold text-lg">{post.title}</div>
+              <div className="mb-2">{post.content}</div>
+              <div className="text-gray-400 text-sm">By: {post.author?.name || 'Unknown'}</div>
+            </li>
+          ))}
+        </ul>
       )}
-    </Container>
+    </div>
   );
 }
 

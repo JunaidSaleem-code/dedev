@@ -1,29 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import axios from 'axios';
 import Loader from '../components/Loader';
 import ErrorMessage from '../components/ErrorMessage';
 import PostList from '../components/PostList';
-
-const Container = styled.div`
-  max-width: 600px;
-  margin: 2rem auto;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  padding: 2rem;
-`;
-const Title = styled.h2`
-  color: #273c75;
-  margin-bottom: 1rem;
-`;
-const Info = styled.div`
-  margin-bottom: 2rem;
-`;
-const Error = styled.div`
-  color: #e84118;
-  font-size: 0.95rem;
-`;
 
 export default function Profile() {
   const user = JSON.parse(localStorage.getItem('userInfo'));
@@ -93,70 +72,78 @@ export default function Profile() {
     }
   };
 
-  if (!user) return <Container><ErrorMessage>Please log in to view your profile.</ErrorMessage></Container>;
+  if (!user) return <div className="max-w-xl mx-auto bg-white rounded-lg shadow-md p-8 mt-8"><ErrorMessage>Please log in to view your profile.</ErrorMessage></div>;
 
   return (
-    <Container>
-      <Title>Your Profile</Title>
-      <Info>
-        {!showUpdateForm ? (
-          <>
-            <div><strong>Name:</strong> {user.name}</div>
-            <div><strong>Email:</strong> {user.email}</div>
-            <div><strong>Role:</strong> {user.role}</div>
-            <div style={{marginTop: '0.5rem', display: 'flex', gap: '0.5rem'}}>
-              <button
-                style={{background: '#4078c0', color: '#fff', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer'}}
-                onClick={() => setShowUpdateForm(true)}
-              >
-                Update Profile
-              </button>
-              <button
-                style={{background: '#e84118', color: '#fff', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer'}}
-                onClick={handleDeleteAccount}
-                disabled={deleting}
-              >
-                {deleting ? 'Deleting...' : 'Delete My Account'}
-              </button>
+    <div className="max-w-xl mx-auto bg-white rounded-lg shadow-md p-8 mt-8">
+      <h2 className="text-blue-900 mb-4 text-2xl font-bold">Profile</h2>
+      <div className="mb-8">
+        <div className="mb-8">
+          <strong>Name:</strong> {user?.name}<br />
+          <strong>Email:</strong> {user?.email}
+        </div>
+        <button
+          className="bg-blue-700 text-white border-none px-4 py-2 rounded font-bold hover:bg-blue-900 transition mb-4"
+          onClick={() => setShowUpdateForm(!showUpdateForm)}
+        >
+          {showUpdateForm ? 'Hide Update Form' : 'Update Profile'}
+        </button>
+        {showUpdateForm && (
+          <form onSubmit={handleUpdate} className="mb-6">
+            <div className="mb-2">
+              <label className="font-bold">Name:</label><br />
+              <input
+                type="text"
+                value={editName}
+                onChange={e => setEditName(e.target.value)}
+                required
+                className="w-full p-2 rounded border border-gray-300 mb-2"
+              />
             </div>
-          </>
-        ) : (
-          <form onSubmit={handleUpdate} style={{marginBottom: '1.5rem'}}>
-            <div style={{marginBottom: '0.5rem'}}>
-              <label><strong>Name:</strong></label><br/>
-              <input type="text" value={editName} onChange={e => setEditName(e.target.value)} required style={{width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc'}} />
+            <div className="mb-2">
+              <label className="font-bold">Email:</label><br />
+              <input
+                type="email"
+                value={editEmail}
+                onChange={e => setEditEmail(e.target.value)}
+                required
+                className="w-full p-2 rounded border border-gray-300 mb-2"
+              />
             </div>
-            <div style={{marginBottom: '0.5rem'}}>
-              <label><strong>Email:</strong></label><br/>
-              <input type="email" value={editEmail} onChange={e => setEditEmail(e.target.value)} required style={{width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc'}} />
-            </div>
-            <div style={{marginBottom: '0.5rem'}}>
-              <label><strong>New Password:</strong></label><br/>
-              <input type="password" value={editPassword} onChange={e => setEditPassword(e.target.value)} placeholder="Leave blank to keep current password" style={{width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc'}} />
+            <div className="mb-2">
+              <label className="font-bold">New Password:</label><br />
+              <input
+                type="password"
+                value={editPassword}
+                onChange={e => setEditPassword(e.target.value)}
+                placeholder="Leave blank to keep current password"
+                className="w-full p-2 rounded border border-gray-300 mb-2"
+              />
             </div>
             <button
               type="submit"
-              style={{marginTop: '0.5rem', background: '#4078c0', color: '#fff', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer'}}
+              className="mt-2 bg-blue-700 text-white border-none px-4 py-2 rounded font-bold hover:bg-blue-900 transition"
               disabled={updating}
             >
               {updating ? 'Updating...' : 'Save Changes'}
             </button>
             <button
               type="button"
-              style={{marginLeft: '0.5rem', background: '#888', color: '#fff', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer'}}
+              className="ml-2 bg-gray-500 text-white border-none px-4 py-2 rounded font-bold hover:bg-gray-700 transition"
               onClick={() => setShowUpdateForm(false)}
               disabled={updating}
             >
               Cancel
             </button>
-            {updateMsg && <div style={{color: 'green', marginTop: '0.5rem'}}>{updateMsg}</div>}
+            {updateMsg && <div className="text-green-600 mt-2">{updateMsg}</div>}
           </form>
         )}
-      </Info>
-      <Title>Your Posts</Title>
-      {loading && <Loader />}
-      {error && <ErrorMessage>{error}</ErrorMessage>}
-      {!loading && !error && <PostList posts={posts} />}
-    </Container>
+        {error && <div className="text-red-600 text-base text-center mb-2">{error}</div>}
+      </div>
+      <div>
+        <h3 className="text-lg font-semibold mb-2">Your Posts</h3>
+        {loading ? <Loader /> : <PostList posts={posts} />}
+      </div>
+    </div>
   );
 } 

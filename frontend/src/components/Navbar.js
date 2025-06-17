@@ -1,61 +1,53 @@
-import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-
-const Nav = styled.nav`
-  background: #273c75;
-  color: #fff;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const NavLinks = styled.div`
-  display: flex;
-  gap: 1.5rem;
-`;
-const StyledLink = styled(Link)`
-  color: #fff;
-  text-decoration: none;
-  font-weight: 500;
-  &:hover { text-decoration: underline; }
-`;
-const UserInfo = styled.span`
-  margin-right: 1rem;
-  font-weight: 500;
-`;
+import axios from 'axios';
 
 export default function Navbar() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('userInfo'));
 
-  const handleLogout = () => {
-    localStorage.removeItem('userInfo');
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await axios.post('/api/users/logout');
+      localStorage.removeItem('userInfo');
+      navigate('/login');
+    } catch (err) {
+      localStorage.removeItem('userInfo');
+      navigate('/login');
+    }
   };
 
   return (
-    <Nav>
-      <NavLinks>
-        <StyledLink to="/">Home</StyledLink>
-        <StyledLink to="/posts">Create Post</StyledLink>
-        {user && user.role === 'admin' && <StyledLink to="/admin">Admin Panel</StyledLink>}
-      </NavLinks>
-      <NavLinks>
+    <nav className="bg-blue-900 text-white px-8 py-4 flex justify-between items-center">
+      <div className="flex gap-6">
+        <Link className="text-white font-medium hover:underline" to="/">Home</Link>
+        <Link className="text-white font-medium hover:underline" to="/posts">Create Post</Link>
+        {user && user.role === 'admin' && (
+          <Link className="text-white font-medium hover:underline" to="/admin">Admin Panel</Link>
+        )}
+      </div>
+      <div className="flex gap-4 items-center">
         {user ? (
           <>
-            <StyledLink as="button" onClick={() => navigate('/profile')} style={{background:'none',border:'none',cursor:'pointer',color:'#fff',fontWeight:'bold'}}>
+            <button
+              onClick={() => navigate('/profile')}
+              className="bg-transparent border-none cursor-pointer text-white font-bold mr-2 hover:underline"
+            >
               {user.name}
-            </StyledLink>
-            <StyledLink as="button" onClick={handleLogout} style={{background:'none',border:'none',cursor:'pointer',color:'#fff'}}>Logout</StyledLink>
+            </button>
+            <button
+              onClick={handleLogout}
+              className="bg-transparent border-none cursor-pointer text-white hover:underline"
+            >
+              Logout
+            </button>
           </>
         ) : (
           <>
-            <StyledLink to="/login">Login</StyledLink>
-            <StyledLink to="/register">Register</StyledLink>
+            <Link className="text-white font-medium hover:underline" to="/login">Login</Link>
+            <Link className="text-white font-medium hover:underline" to="/register">Register</Link>
           </>
         )}
-      </NavLinks>
-    </Nav>
+      </div>
+    </nav>
   );
 } 
